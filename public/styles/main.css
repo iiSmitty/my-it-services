@@ -17,6 +17,7 @@
     --border-radius: 8px;
     --border-radius-lg: 12px;
     --transition: all 0.3s ease;
+    --animation-delay: 0s;
 }
 
 /* Reset & Base Styles */
@@ -233,7 +234,9 @@ body {
     margin-bottom: 4rem;
 }
 
-.service-card {
+/* Service Cards (both div and article) */
+.service-card,
+article.service-card {
     background: white;
     border-radius: var(--border-radius-lg);
     padding: 2rem;
@@ -244,7 +247,8 @@ body {
     overflow: hidden;
 }
 
-.service-card::before {
+.service-card::before,
+article.service-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -256,12 +260,14 @@ body {
     transition: var(--transition);
 }
 
-.service-card:hover {
+.service-card:hover,
+article.service-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
 }
 
-.service-card:hover::before {
+.service-card:hover::before,
+article.service-card:hover::before {
     transform: scaleX(1);
 }
 
@@ -321,14 +327,16 @@ body {
 }
 
 /* Add-ons Section */
-.addons-section {
+.addons-section,
+aside.addons-section {
     background: var(--bg-secondary);
     border-radius: var(--border-radius-lg);
     padding: 2rem;
     margin-top: 2rem;
 }
 
-.addons-section h3 {
+.addons-section h3,
+aside.addons-section h3 {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
@@ -427,30 +435,274 @@ body {
     text-decoration: underline;
 }
 
+/* Enhanced Quote Form Styles */
 .quote-form {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border-radius: var(--border-radius-lg);
     padding: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
 }
 
-.quote-form h3 {
+.form-header {
     text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-header h3 {
     font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-header p {
+    color: #d1d5db;
+    font-size: 0.9rem;
 }
 
 .contact-form {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Fieldset and Legend styling for form sections */
+.form-section {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
 }
 
-.form-group select,
-.form-row input,
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    border: none;
+    padding: 0;
+}
+
+/* Service Selection Grid */
+.service-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.service-option {
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: block;
+}
+
+.service-option:hover {
+    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(16, 185, 129, 0.1);
+    transform: translateY(-2px);
+}
+
+.service-option.selected {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.service-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.service-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.service-option .service-icon {
+    font-size: 1.5rem;
+    width: auto;
+    height: auto;
+    margin: 0;
+    background: none;
+}
+
+.service-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    flex: 1;
+}
+
+.service-price {
+    color: #10b981;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.service-description {
+    color: #d1d5db;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    display: block;
+}
+
+/* Form Controls */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #f3f4f6;
+    font-size: 0.9rem;
+}
+
+.required {
+    color: #f87171;
+}
+
+.optional {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+.contact-form input,
 .contact-form textarea {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #10b981;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: #9ca3af;
+}
+
+.contact-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.character-count {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    text-align: right;
+}
+
+/* Urgency Options */
+.urgency-options {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.urgency-option {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    position: relative;
+    display: block;
+}
+
+.urgency-option:hover {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.urgency-option.selected {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+}
+
+.urgency-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Submit Section */
+.submit-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.form-note {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: #93c5fd;
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* Legacy form styles (for backward compatibility) */
+.form-group select,
+.form-row input {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--border-radius);
@@ -460,8 +712,7 @@ body {
 }
 
 .form-group select:focus,
-.form-row input:focus,
-.contact-form textarea:focus {
+.form-row input:focus {
     outline: none;
     border-color: var(--secondary-color);
     background: rgba(255, 255, 255, 0.15);
@@ -476,23 +727,6 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-}
-
-.submit-btn {
-    background: var(--secondary-color);
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: var(--border-radius);
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.submit-btn:hover {
-    background: #059669;
-    transform: translateY(-1px);
 }
 
 /* Footer */
@@ -545,71 +779,32 @@ body {
     border: 0;
 }
 
-/* WhatsApp Floating Button */
-.whatsapp-floating {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #25d366;
-    color: white;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    text-decoration: none;
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
-    animation: pulse 2s infinite;
-    z-index: 1000;
-    transition: transform 0.3s ease;
+/* Scroll animations */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition-delay: var(--animation-delay, 0s);
 }
 
-.whatsapp-floating:hover {
-    transform: scale(1.1);
+.animate-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
+.card-active {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Service WhatsApp buttons */
-.whatsapp-service-btn {
-    display: inline-block;
-    background: #25d366;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
-    text-decoration: none;
-    font-weight: 600;
-    margin-top: 1rem;
-    transition: var(--transition);
-    width: 100%;
-    text-align: center;
+.header.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.whatsapp-service-btn:hover {
-    background: #20b858;
-    transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-    .whatsapp-floating {
-        bottom: 15px;
-        right: 15px;
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
-    }
+.header {
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 /* Responsive Design */
@@ -652,6 +847,15 @@ body {
         font-size: 2rem;
         padding: 0.5rem;
     }
+
+    /* Enhanced form responsive styles */
+    .service-selection-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .urgency-options {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 480px) {
@@ -675,4 +879,132 @@ body {
     .container {
         padding: 0 0.5rem;
     }
+
+    .quote-form {
+        padding: 1.5rem;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .animate-on-scroll,
+    .card-active,
+    .header {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    .floating-icons .icon {
+        animation: none !important;
+    }
+}
+
+/* Error states for form fields */
+.field-error {
+    border-color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+.fieldset-error .service-option,
+.fieldset-error .urgency-option {
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    background: rgba(239, 68, 68, 0.05) !important;
+}
+
+/* Error message styling */
+.error-message {
+    color: #fca5a5;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    animation: slideInError 0.3s ease-out;
+}
+
+.error-message::before {
+    font-size: 0.9rem;
+}
+
+.fieldset-error-message {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 6px;
+    text-align: center;
+}
+
+/* Shake animation for validation errors */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+    20%, 40%, 60%, 80% { transform: translateX(3px); }
+}
+
+@keyframes slideInError {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Success states */
+.field-success {
+    border-color: #10b981 !important;
+    background: rgba(16, 185, 129, 0.05) !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Better focus states that work with validation */
+.contact-form input:not(.field-error):focus,
+.contact-form textarea:not(.field-error):focus {
+    border-color: #10b981;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Hide browser validation tooltips */
+input:invalid,
+select:invalid,
+textarea:invalid {
+    box-shadow: none;
+}
+
+/* Improve visual hierarchy for required fields */
+.required {
+    color: #fca5a5;
+    font-weight: 600;
+}
+
+/*!* Better styling for fieldset errors *!*/
+/*.fieldset-error .section-title {*/
+/*    color: #fca5a5 !important;*/
+/*}*/
+
+/* Smooth transitions for validation states */
+.contact-form input,
+.contact-form textarea,
+.service-option,
+.urgency-option {
+    transition: all 0.3s ease, box-shadow 0.2s ease;
+}
+
+/* Loading state improvements */
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Better error spacing */
+.form-group .error-message {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
 }

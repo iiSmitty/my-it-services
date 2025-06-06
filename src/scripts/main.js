@@ -1,18 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scrolling for navigation links
+    // Initialize all components
     initSmoothScrolling();
-
-    // Form handling
     initFormHandling();
-
-    // Service card interactions
     initServiceCardAnimations();
-
-    // Navbar scroll effect
     initNavbarScrollEffect();
-
-    // Intersection Observer for animations
     initScrollAnimations();
+    initEnhancedFormInteractions();
+    initCustomValidation();
 
     // Update copyright year
     const yearElement = document.getElementById('current-year');
@@ -20,6 +14,179 @@ document.addEventListener('DOMContentLoaded', function() {
         yearElement.textContent = new Date().getFullYear();
     }
 });
+
+/**
+ * Initialize custom form validation
+ */
+function initCustomValidation() {
+    const form = document.getElementById('quoteForm');
+    if (!form) return;
+
+    // Disable browser default validation
+    form.setAttribute('novalidate', 'true');
+
+    // Add real-time validation listeners
+    const nameInput = document.getElementById('name');
+    const serviceRadios = document.querySelectorAll('input[name="service"]');
+    const urgencyRadios = document.querySelectorAll('input[name="urgency"]');
+
+    if (nameInput) {
+        nameInput.addEventListener('blur', () => validateField(nameInput));
+        nameInput.addEventListener('input', () => clearFieldError(nameInput));
+    }
+
+    serviceRadios.forEach(radio => {
+        radio.addEventListener('change', () => clearFieldsetError('service'));
+    });
+
+    urgencyRadios.forEach(radio => {
+        radio.addEventListener('change', () => clearFieldsetError('urgency'));
+    });
+}
+
+/**
+ * Validate individual field
+ */
+function validateField(field) {
+    const value = field.value.trim();
+
+    if (!value) {
+        showFieldError(field, 'This field is required');
+        return false;
+    }
+
+    // Additional validation for name field
+    if (field.name === 'name' && value.length < 2) {
+        showFieldError(field, 'Please enter at least 2 characters');
+        return false;
+    }
+
+    clearFieldError(field);
+    return true;
+}
+
+/**
+ * Validate radio button groups
+ */
+function validateFieldset(name) {
+    const radios = document.querySelectorAll(`input[name="${name}"]`);
+    const isSelected = Array.from(radios).some(radio => radio.checked);
+
+    if (!isSelected) {
+        showFieldsetError(name, 'Please select an option');
+        return false;
+    }
+
+    clearFieldsetError(name);
+    return true;
+}
+
+/**
+ * Show field error
+ */
+function showFieldError(field, message) {
+    // Remove existing error
+    clearFieldError(field);
+
+    // Add error class to field
+    field.classList.add('field-error');
+
+    // Create error message
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+
+    // Insert error message after the field
+    field.parentNode.insertBefore(errorDiv, field.nextSibling);
+
+    // Add gentle shake animation
+    field.style.animation = 'shake 0.5s ease-in-out';
+    setTimeout(() => {
+        field.style.animation = '';
+    }, 500);
+}
+
+/**
+ * Show fieldset error (for radio groups)
+ */
+function showFieldsetError(fieldsetName, message) {
+    // Remove existing error
+    clearFieldsetError(fieldsetName);
+
+    // Find the fieldset container
+    const firstRadio = document.querySelector(`input[name="${fieldsetName}"]`);
+    if (!firstRadio) return;
+
+    const fieldset = firstRadio.closest('.form-section');
+    if (!fieldset) return;
+
+    // Add error class
+    fieldset.classList.add('fieldset-error');
+
+    // Create error message
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message fieldset-error-message';
+    errorDiv.textContent = message;
+
+    // Insert after the options container
+    const optionsContainer = fieldset.querySelector('.service-selection-grid, .urgency-options');
+    if (optionsContainer) {
+        optionsContainer.parentNode.insertBefore(errorDiv, optionsContainer.nextSibling);
+    }
+}
+
+/**
+ * Clear field error
+ */
+function clearFieldError(field) {
+    field.classList.remove('field-error');
+    const errorMsg = field.parentNode.querySelector('.error-message');
+    if (errorMsg) {
+        errorMsg.remove();
+    }
+}
+
+/**
+ * Clear fieldset error
+ */
+function clearFieldsetError(fieldsetName) {
+    const firstRadio = document.querySelector(`input[name="${fieldsetName}"]`);
+    if (!firstRadio) return;
+
+    const fieldset = firstRadio.closest('.form-section');
+    if (!fieldset) return;
+
+    fieldset.classList.remove('fieldset-error');
+    const errorMsg = fieldset.querySelector('.fieldset-error-message');
+    if (errorMsg) {
+        errorMsg.remove();
+    }
+}
+
+/**
+ * Validate entire form
+ */
+function validateForm(_form) {
+    let isValid = true;
+
+    // Validate name field
+    const nameInput = document.getElementById('name');
+    if (nameInput && !validateField(nameInput)) {
+        isValid = false;
+    }
+
+    // Validate service selection
+    if (!validateFieldset('service')) {
+        isValid = false;
+    }
+
+    // Validate urgency selection
+    if (!validateFieldset('urgency')) {
+        isValid = false;
+    }
+
+    return isValid;
+}
 
 /**
  * Initialize smooth scrolling for navigation links
@@ -56,36 +223,112 @@ function initFormHandling() {
     if (quoteForm) {
         quoteForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            handleQuoteSubmission(this);
+
+            // Custom validation
+            if (!validateForm(this)) {
+                // Scroll to first error
+                const firstError = this.querySelector('.field-error, .fieldset-error');
+                if (firstError) {
+                    firstError.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+                return;
+            }
+
+            handleEnhancedQuoteSubmission(this);
         });
     }
 }
 
 /**
- * Handle quote form submission
+ * Initialize enhanced form interactions
+ */
+function initEnhancedFormInteractions() {
+    // Handle service selection
+    const serviceRadios = document.querySelectorAll('input[name="service"]');
+    serviceRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Remove selected class from all options
+            document.querySelectorAll('.service-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            // Add selected class to current option
+            this.closest('.service-option').classList.add('selected');
+        });
+    });
+
+    // Handle urgency selection
+    const urgencyRadios = document.querySelectorAll('input[name="urgency"]');
+    urgencyRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Remove selected class from all options
+            document.querySelectorAll('.urgency-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            // Add selected class to current option
+            this.closest('.urgency-option').classList.add('selected');
+        });
+    });
+
+    // Character counter for textarea
+    const textarea = document.getElementById('projectDetails');
+    const charCount = document.getElementById('charCount');
+
+    if (textarea && charCount) {
+        textarea.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+    }
+
+    // Add click handlers for better mobile experience
+    document.querySelectorAll('.service-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+
+    document.querySelectorAll('.urgency-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+}
+
+/**
+ * Handle enhanced quote form submission
  * @param {HTMLFormElement} form - The form element
  */
-function handleQuoteSubmission(form) {
+function handleEnhancedQuoteSubmission(form) {
     const formData = new FormData(form);
     const submitBtn = form.querySelector('.submit-btn');
-    const originalText = submitBtn.textContent;
+    const originalHTML = submitBtn.innerHTML;
 
     // Show loading state
-    submitBtn.textContent = 'Sending...';
+    submitBtn.innerHTML = '<span>Sending...</span> <span>⏳</span>';
     submitBtn.disabled = true;
 
-    // Simulate form submission (replace with actual submission logic)
+    // Simulate form submission delay
     setTimeout(() => {
         // Get form data
         const data = {
             service: formData.get('service'),
             name: formData.get('name'),
-            phone: formData.get('phone'),
-            details: formData.get('details')
+            details: formData.get('details') || '',
+            urgency: formData.get('urgency')
         };
 
-        // Create WhatsApp message
-        const whatsappMessage = createWhatsAppMessage(data);
+        // Create enhanced WhatsApp message
+        const whatsappMessage = createEnhancedWhatsAppMessage(data);
 
         // Open WhatsApp
         const phoneNumber = '27723386828';
@@ -93,21 +336,95 @@ function handleQuoteSubmission(form) {
 
         window.open(whatsappUrl, '_blank');
 
-        // Reset form
-        form.reset();
+        // Show success state
+        submitBtn.innerHTML = '<span>Quote Sent!</span> <span>✅</span>';
 
-        // Show success message
-        showNotification('Quote request sent! We\'ll get back to you soon.', 'success');
+        // Show success notification
+        showNotification('Quote request sent! Check WhatsApp to continue the conversation.', 'success');
 
-        // Reset button
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
+        // Reset form after delay
+        setTimeout(() => {
+            form.reset();
+            submitBtn.innerHTML = originalHTML;
+            submitBtn.disabled = false;
+
+            // Reset visual states
+            document.querySelectorAll('.service-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelectorAll('.urgency-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Set default urgency selection
+            const defaultUrgency = document.querySelector('input[name="urgency"][value="week"]');
+            if (defaultUrgency) {
+                defaultUrgency.checked = true;
+                defaultUrgency.closest('.urgency-option').classList.add('selected');
+            }
+
+            // Reset character counter
+            const charCount = document.getElementById('charCount');
+            if (charCount) {
+                charCount.textContent = '0';
+            }
+
+            // Clear any remaining errors
+            form.querySelectorAll('.field-error').forEach(field => {
+                clearFieldError(field);
+            });
+            form.querySelectorAll('.fieldset-error').forEach(fieldset => {
+                fieldset.classList.remove('fieldset-error');
+            });
+            form.querySelectorAll('.error-message').forEach(msg => {
+                msg.remove();
+            });
+
+        }, 3000);
 
     }, 1000);
 }
 
 /**
- * Create WhatsApp message from form data
+ * Create enhanced WhatsApp message from form data
+ * @param {Object} data - Form data object
+ * @returns {string} Formatted WhatsApp message
+ */
+function createEnhancedWhatsAppMessage(data) {
+    const serviceMap = {
+        'windows': 'Windows Install (R250-R400)',
+        'website': 'Website Development (R400-R700)',
+        'software': 'Software Installation (R100-R200)',
+        'hardware': 'Hardware Upgrade (R150-R300)',
+        'combo': 'Multiple Services (Custom Quote)'
+    };
+
+    const urgencyMap = {
+        'asap': 'ASAP (within 1-2 days)',
+        'week': 'This week',
+        'flexible': 'I\'m flexible with timing'
+    };
+
+    const serviceName = serviceMap[data.service] || data.service;
+    const urgencyText = urgencyMap[data.urgency] || data.urgency;
+
+    // Create message without emojis to avoid encoding issues
+    let message = `Hi! I'd like to request a quote from your IT services website\n\n`;
+    message += `Name: ${data.name}\n`;
+    message += `Service: ${serviceName}\n`;
+    message += `Timeline: ${urgencyText}\n\n`;
+
+    if (data.details) {
+        message += `Additional Details:\n${data.details}\n\n`;
+    }
+
+    message += `Could you please send me a quote? Thanks!`;
+
+    return message;
+}
+
+/**
+ * Legacy WhatsApp message creation (for backward compatibility)
  * @param {Object} data - Form data object
  * @returns {string} Formatted WhatsApp message
  */
@@ -140,6 +457,10 @@ Please send me a quote when convenient. Thanks!`;
  * @param {string} type - Type of notification (success, error, info)
  */
 function showNotification(message, type = 'info') {
+    // Remove any existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notif => notif.remove());
+
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
@@ -157,6 +478,7 @@ function showNotification(message, type = 'info') {
         zIndex: '1000',
         fontSize: '0.9rem',
         fontWeight: '500',
+        maxWidth: '300px',
         transform: 'translateX(100%)',
         transition: 'transform 0.3s ease'
     });
@@ -276,56 +598,3 @@ function initScrollAnimations() {
         card.style.setProperty('--animation-delay', `${index * 0.1}s`);
     });
 }
-
-/**
- * Add custom CSS for scroll animations
- */
-function addCustomAnimationStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            transition-delay: var(--animation-delay, 0s);
-        }
-        
-        .animate-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .card-active {
-            transform: translateY(-8px) !important;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
-        }
-        
-        .header.scrolled {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header {
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            .animate-on-scroll,
-            .card-active,
-            .header {
-                transition: none !important;
-                animation: none !important;
-            }
-            
-            .floating-icons .icon {
-                animation: none !important;
-            }
-        }
-    `;
-
-    document.head.appendChild(style);
-}
-
-// Initialize custom animation styles
-addCustomAnimationStyles();
