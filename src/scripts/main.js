@@ -81,8 +81,8 @@ function handleQuoteSubmission(form) {
         // Create WhatsApp message
         const whatsappMessage = createWhatsAppMessage(data);
 
-        // Open WhatsApp (replace with your actual phone number)
-        const phoneNumber = '27123456789'; // Replace with your actual number
+        // Open WhatsApp
+        const phoneNumber = '27723386828';
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
         window.open(whatsappUrl, '_blank');
