@@ -1,0 +1,15 @@
+---
+import { PricingHelper, type AddonConfig } from '../data/config.ts';
+
+export interface Props {
+    addon: AddonConfig;
+}
+
+const { addon } = Astro.props;
+---
+
+<div class="addon-item">
+    <strong>{addon.title}</strong>
+    <span class="addon-price">{PricingHelper.formatPrice(addon.price)}</span>
+    <p>{addon.description}</p>
+</div>

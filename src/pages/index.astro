@@ -1,4 +1,19 @@
 ---
+import ServiceCard from '../components/ServiceCard.astro';
+import ServiceOption from '../components/ServiceOption.astro';
+import AddonItem from '../components/AddonItem.astro';
+import {
+    ENHANCED_SERVICES,
+    ENHANCED_ADDONS,
+    URGENCY_OPTIONS,
+    CONTENT,
+    CONFIG,
+    SERVICE_IDS,
+    type UrgencyOption
+} from '../data/config.ts';
+
+// Get service IDs with proper typing
+const mainServiceIds = SERVICE_IDS.filter(id => id !== 'combo');
 ---
 
 <!DOCTYPE html>
@@ -7,7 +22,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT Services - Funding My Padel Addiction</title>
-    <meta name="description" content="Personal IT services including Windows installations, website development, software setup, and hardware upgrades. Reliable, affordable, and fast - helping fund my padel passion!">
+    <meta name="description" content="Personal IT services including Windows installations, website development, software setup, and hardware upgrades. Clear pricing, reliable service!">
     <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
@@ -15,7 +30,7 @@
     <div class="container">
         <div class="logo">
             <span class="logo-icon">🏓</span>
-            <h1>IT Services & Padel Dreams</h1>
+            <h1>{CONFIG.business.name}</h1>
         </div>
         <nav class="nav">
             <a href="#services">Services</a>
@@ -28,9 +43,9 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h2>Personal IT Services to Fund My Padel Addiction</h2>
-                <p>Hi! I'm a tech enthusiast who loves solving computer problems almost as much as I love playing padel. Every service helps me get closer to my next match on the court!</p>
-                <a href="#services" class="hero-cta">Check Out My Services</a>
+                <h2>{CONTENT.hero.title}</h2>
+                <p>{CONTENT.hero.subtitle}</p>
+                <a href="#services" class="hero-cta">{CONTENT.hero.cta}</a>
             </div>
             <div class="hero-visual">
                 <div class="floating-icons">
@@ -45,81 +60,20 @@
 
     <section id="services" class="services">
         <div class="container">
-            <h2>What I Can Do For You</h2>
+            <h2>{CONTENT.sections.services.title}</h2>
 
             <div class="services-grid">
-                <article class="service-card" data-service="windows">
-                    <div class="service-icon">💻</div>
-                    <h3>Clean Windows Install</h3>
-                    <p>Fresh OS installation with drivers and updates (excludes data backup & OS license)</p>
-                    <div class="price-range">R250 - R400</div>
-                    <ul class="service-features">
-                        <li>Complete system format</li>
-                        <li>Fresh Windows installation</li>
-                        <li>Driver installation & updates</li>
-                        <li>Basic system optimization</li>
-                    </ul>
-                </article>
-
-                <article class="service-card" data-service="website">
-                    <div class="service-icon">🌐</div>
-                    <h3>One-Page Basic Website</h3>
-                    <p>Professional single-page website using HTML/CSS or builder platforms</p>
-                    <div class="price-range">R400 - R700</div>
-                    <ul class="service-features">
-                        <li>Custom design or builder-based</li>
-                        <li>Mobile-responsive layout</li>
-                        <li>Basic SEO optimization</li>
-                        <li>Optional hosting/domain support</li>
-                    </ul>
-                </article>
-
-                <article class="service-card" data-service="software">
-                    <div class="service-icon">📦</div>
-                    <h3>Software Installation</h3>
-                    <p>Bulk software setup including Office, antivirus, browsers, and essential apps</p>
-                    <div class="price-range">R100 - R200</div>
-                    <div class="price-note">Per session (flat rate)</div>
-                    <ul class="service-features">
-                        <li>Microsoft Office suite</li>
-                        <li>Antivirus & security software</li>
-                        <li>Essential browsers & apps</li>
-                        <li>Configuration & setup</li>
-                    </ul>
-                </article>
-
-                <article class="service-card" data-service="hardware">
-                    <div class="service-icon">🧠</div>
-                    <h3>RAM or SSD Upgrade</h3>
-                    <p>Professional hardware installation and setup (parts cost excluded)</p>
-                    <div class="price-range">R150 - R300</div>
-                    <ul class="service-features">
-                        <li>RAM memory upgrades</li>
-                        <li>SSD drive installation</li>
-                        <li>Desktop & laptop service</li>
-                        <li>Parts sourcing assistance</li>
-                    </ul>
-                </article>
+                {mainServiceIds.map(serviceId => (
+                        <ServiceCard serviceId={serviceId} />
+                ))}
             </div>
 
             <aside class="addons-section">
                 <h3>🔄 Optional Add-Ons</h3>
                 <div class="addons-grid">
-                    <div class="addon-item">
-                        <strong>PC Cleanup & Tune-up</strong>
-                        <span>R150</span>
-                        <p>Bloatware removal & startup optimization</p>
-                    </div>
-                    <div class="addon-item">
-                        <strong>Driver Updates & Activation</strong>
-                        <span>R100 - R200</span>
-                        <p>Complete driver package & Windows activation</p>
-                    </div>
-                    <div class="addon-item">
-                        <strong>Windows + Office Combo</strong>
-                        <span>R350 - R500</span>
-                        <p>Complete OS and productivity suite setup</p>
-                    </div>
+                    {ENHANCED_ADDONS.map(addon => (
+                            <AddonItem addon={addon} />
+                    ))}
                 </div>
             </aside>
         </div>
@@ -127,20 +81,20 @@
 
     <section id="contact" class="contact">
         <div class="container">
-            <h2>Let's Get Your Tech Sorted (And My Padel Game Funded!)</h2>
-            <p>Ready to upgrade your tech? Drop me a message and let's get started. Every job gets me one step closer to the padel court!</p>
+            <h2>{CONTENT.sections.contact.title}</h2>
+            <p>{CONTENT.sections.contact.subtitle}</p>
 
             <div class="contact-methods">
                 <div class="contact-card">
                     <div class="contact-icon">📱</div>
                     <h3>Call or WhatsApp</h3>
-                    <a href="tel:+27723386828" class="contact-link">+27 72 338 6828</a>
+                    <a href={`tel:${CONFIG.business.phone}`} class="contact-link">{CONFIG.business.phone}</a>
                 </div>
 
                 <div class="contact-card">
                     <div class="contact-icon">✉️</div>
                     <h3>Email Me</h3>
-                    <a href="mailto:info@andresmit.co.za" class="contact-link">info@andresmit.co.za</a>
+                    <a href={`mailto:${CONFIG.business.email}`} class="contact-link">{CONFIG.business.email}</a>
                 </div>
 
                 <div class="contact-card">
@@ -152,63 +106,17 @@
 
             <div class="quote-form">
                 <header class="form-header">
-                    <h3>Quick Quote Request</h3>
-                    <p>Tell me what you need and I'll send you a personalized quote via WhatsApp</p>
+                    <h3>{CONTENT.form.title}</h3>
+                    <p>{CONTENT.form.subtitle}</p>
                 </header>
 
                 <form class="contact-form" id="quoteForm">
                     <fieldset class="form-section">
                         <legend class="section-title">1. What service do you need?</legend>
                         <div class="service-selection-grid">
-                            <label class="service-option">
-                                <input type="radio" name="service" value="windows" required>
-                                <span class="service-header">
-                                        <span class="service-icon">💻</span>
-                                        <span class="service-title">Windows Install</span>
-                                        <span class="service-price">R250-R400</span>
-                                    </span>
-                                <span class="service-description">Fresh OS installation with drivers and updates</span>
-                            </label>
-
-                            <label class="service-option">
-                                <input type="radio" name="service" value="website" required>
-                                <span class="service-header">
-                                        <span class="service-icon">🌐</span>
-                                        <span class="service-title">Website Development</span>
-                                        <span class="service-price">R400-R700</span>
-                                    </span>
-                                <span class="service-description">Professional single-page website</span>
-                            </label>
-
-                            <label class="service-option">
-                                <input type="radio" name="service" value="software" required>
-                                <span class="service-header">
-                                        <span class="service-icon">📦</span>
-                                        <span class="service-title">Software Installation</span>
-                                        <span class="service-price">R100-R200</span>
-                                    </span>
-                                <span class="service-description">Bulk software setup and configuration</span>
-                            </label>
-
-                            <label class="service-option">
-                                <input type="radio" name="service" value="hardware" required>
-                                <span class="service-header">
-                                        <span class="service-icon">🧠</span>
-                                        <span class="service-title">Hardware Upgrade</span>
-                                        <span class="service-price">R150-R300</span>
-                                    </span>
-                                <span class="service-description">RAM or SSD installation and setup</span>
-                            </label>
-
-                            <label class="service-option">
-                                <input type="radio" name="service" value="combo" required>
-                                <span class="service-header">
-                                        <span class="service-icon">🔄</span>
-                                        <span class="service-title">Multiple Services</span>
-                                        <span class="service-price">Custom Quote</span>
-                                    </span>
-                                <span class="service-description">Combination of services with discount</span>
-                            </label>
+                            {SERVICE_IDS.map(serviceId => (
+                                    <ServiceOption serviceId={serviceId} required={true} />
+                            ))}
                         </div>
                     </fieldset>
 
@@ -234,24 +142,24 @@
                     <fieldset class="form-section">
                         <legend class="section-title">4. When do you need this done?</legend>
                         <div class="urgency-options">
-                            <label class="urgency-option">
-                                <input type="radio" name="urgency" value="asap" required>
-                                🚀 ASAP (within 1-2 days)
-                            </label>
-                            <label class="urgency-option selected">
-                                <input type="radio" name="urgency" value="week" checked required>
-                                📅 This week
-                            </label>
-                            <label class="urgency-option">
-                                <input type="radio" name="urgency" value="flexible" required>
-                                🕒 I'm flexible
-                            </label>
+                            {Object.entries(URGENCY_OPTIONS).map(([id, option]: [string, UrgencyOption]) => (
+                                    <label class={`urgency-option ${option.default ? 'selected' : ''}`}>
+                                        <input
+                                                type="radio"
+                                                name="urgency"
+                                                value={id}
+                                                checked={option.default}
+                                                required
+                                        >
+                                        {option.icon} {option.label}
+                                    </label>
+                            ))}
                         </div>
                     </fieldset>
 
                     <div class="submit-section">
                         <div class="form-note">
-                            Your quote will be sent via WhatsApp - no spam, just a personalized quote and next steps!
+                            {CONTENT.form.disclaimer}
                         </div>
                         <button type="submit" class="submit-btn">
                             <span>Send Quote Request</span>
@@ -266,11 +174,25 @@
 <footer class="footer">
     <div class="container">
         <div class="footer-content">
-            <p>&copy; <span id="current-year"></span> <a href="https://andresmit.co.za" target="_blank">andresmit.co.za</a> | Personal IT Services</p>
+            <p>&copy; <span id="current-year"></span> <a href={CONFIG.business.website} target="_blank">{CONFIG.business.website.replace('https://', '')}</a> | Personal IT Services</p>
         </div>
     </div>
 </footer>
 
+<script define:vars={{
+    CONFIG,
+    SERVICES: ENHANCED_SERVICES,
+    URGENCY_OPTIONS,
+    ADDONS: ENHANCED_ADDONS
+}} is:inline>
+    // Make configuration available to JavaScript
+    window.CONFIG = CONFIG;
+    window.SERVICES_CONFIG = {
+        services: SERVICES,
+        urgencyOptions: URGENCY_OPTIONS,
+        addons: ADDONS
+    };
+</script>
 <script src="../scripts/main.js"></script>
 </body>
 </html>

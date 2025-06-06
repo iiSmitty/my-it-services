@@ -1,0 +1,27 @@
+---
+import { ENHANCED_SERVICES, PricingHelper, type ServiceConfig } from '../data/config.ts';
+
+export interface Props {
+    serviceId: keyof typeof ENHANCED_SERVICES;
+}
+
+const { serviceId } = Astro.props;
+const service: ServiceConfig = ENHANCED_SERVICES[serviceId];
+
+if (!service) {
+    throw new Error(`Service with id "${serviceId}" not found`);
+}
+---
+
+<article class="service-card" data-service={service.id}>
+    <div class="service-icon">{service.icon}</div>
+    <h3>{service.title}</h3>
+    <p>{service.description}</p>
+    <div class="price-range">{PricingHelper.formatPrice(service.price)}</div>
+    {service.priceNote && <div class="price-note">{service.priceNote}</div>}
+    <ul class="service-features">
+        {service.features.map((feature: string) => (
+                <li>{feature}</li>
+        ))}
+    </ul>
+</article>

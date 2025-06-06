@@ -1,0 +1,21 @@
+---
+import { ENHANCED_SERVICES, PricingHelper, type ServiceConfig } from '../data/config.ts';
+
+export interface Props {
+    serviceId: keyof typeof ENHANCED_SERVICES;
+    required?: boolean;
+}
+
+const { serviceId, required = false } = Astro.props;
+const service: ServiceConfig = ENHANCED_SERVICES[serviceId];
+---
+
+<label class="service-option">
+    <input type="radio" name="service" value={service.id} required={required}>
+    <span class="service-header">
+        <span class="service-icon">{service.icon}</span>
+        <span class="service-title">{service.title}</span>
+        <span class="service-price">{PricingHelper.formatPrice(service.price)}</span>
+    </span>
+    <span class="service-description">{service.description}</span>
+</label>

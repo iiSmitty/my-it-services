@@ -1,4 +1,8 @@
-document.addEventListener('DOMContentLoaded', function() {
+// Access the centralized configuration from the window object
+const CONFIG = window.CONFIG || {};
+const {services: SERVICES, urgencyOptions: URGENCY_OPTIONS} = window.SERVICES_CONFIG || {};
+
+document.addEventListener('DOMContentLoaded', function () {
     // Initialize all components
     initSmoothScrolling();
     initFormHandling();
@@ -8,12 +12,108 @@ document.addEventListener('DOMContentLoaded', function() {
     initEnhancedFormInteractions();
     initCustomValidation();
 
-// Update copyright year
+    // Update copyright year
     const yearElement = document.getElementById('current-year');
     if (yearElement) {
         yearElement.textContent = new Date().getFullYear().toString();
     }
 });
+
+/**
+ * Create enhanced WhatsApp message using simplified pricing
+ * @param {Object} data - Form data object
+ * @returns {string} Formatted WhatsApp message
+ */
+function createEnhancedWhatsAppMessage(data) {
+    // Use centralized configuration for service mapping
+    const getServiceDisplayName = (serviceId) => {
+        const service = SERVICES[serviceId];
+        if (!service) return serviceId;
+
+        // Format price from config
+        const price = CONFIG?.pricing?.services?.[serviceId];
+        const priceText = typeof price === 'number' ? `R${price}` : price || 'Custom Quote';
+
+        return `${service.title} (${priceText})`;
+    };
+
+    const getUrgencyDisplayText = (urgencyId) => {
+        const urgency = URGENCY_OPTIONS[urgencyId];
+        return urgency ? urgency.label : urgencyId;
+    };
+
+    const serviceName = getServiceDisplayName(data.service);
+    const urgencyText = getUrgencyDisplayText(data.urgency);
+
+    // Create message
+    let message = `Hi! I'd like to request a quote from your IT services website\n\n`;
+    message += `Name: ${data.name}\n`;
+    message += `Service: ${serviceName}\n`;
+    message += `Timeline: ${urgencyText}\n\n`;
+
+    if (data.details) {
+        message += `Additional Details:\n${data.details}\n\n`;
+    }
+
+    message += `Could you please send me a quote? Thanks!`;
+
+    return message;
+}
+
+/**
+ * Calculate total price for multiple services (optional feature)
+ * @param {Array} serviceIds - Array of service IDs
+ * @returns {number} Total price
+ */
+function calculateTotal(serviceIds) {
+    if (!CONFIG?.pricing?.services) return 0;
+
+    let total = 0;
+    serviceIds.forEach(id => {
+        const price = CONFIG.pricing.services[id];
+        if (typeof price === 'number') {
+            total += price;
+        }
+    });
+
+    // Apply multi-service discount if configured
+    const discount = CONFIG?.pricing?.discounts?.multipleServices;
+    if (serviceIds.length > 1 && discount) {
+        total = Math.round(total * (1 - discount));
+    }
+
+    return total;
+}
+
+/**
+ * Display price information dynamically (optional enhancement)
+ */
+function updatePriceDisplays() {
+    if (!CONFIG?.pricing?.services) return;
+
+    // Update service cards with current pricing
+    document.querySelectorAll('.service-card').forEach(card => {
+        const serviceId = card.dataset.service;
+        const priceElement = card.querySelector('.price-range');
+
+        if (serviceId && priceElement) {
+            const price = CONFIG.pricing.services[serviceId];
+            priceElement.textContent = typeof price === 'number' ? `R${price}` : price;
+        }
+    });
+
+    // Update form options with current pricing
+    document.querySelectorAll('.service-option').forEach(option => {
+        const input = option.querySelector('input[type="radio"]');
+        const priceElement = option.querySelector('.service-price');
+
+        if (input && priceElement) {
+            const serviceId = input.value;
+            const price = CONFIG.pricing.services[serviceId];
+            priceElement.textContent = typeof price === 'number' ? `R${price}` : price;
+        }
+    });
+}
 
 /**
  * Initialize custom form validation
@@ -195,7 +295,7 @@ function initSmoothScrolling() {
     const navLinks = document.querySelectorAll('a[href^="#"]');
 
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
 
             const targetId = this.getAttribute('href');
@@ -221,7 +321,7 @@ function initFormHandling() {
     const quoteForm = document.getElementById('quoteForm');
 
     if (quoteForm) {
-        quoteForm.addEventListener('submit', function(e) {
+        quoteForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
             // Custom validation
@@ -249,7 +349,7 @@ function initEnhancedFormInteractions() {
     // Handle service selection
     const serviceRadios = document.querySelectorAll('input[name="service"]');
     serviceRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
+        radio.addEventListener('change', function () {
             // Remove selected class from all options
             document.querySelectorAll('.service-option').forEach(option => {
                 option.classList.remove('selected');
@@ -262,7 +362,7 @@ function initEnhancedFormInteractions() {
     // Handle urgency selection
     const urgencyRadios = document.querySelectorAll('input[name="urgency"]');
     urgencyRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
+        radio.addEventListener('change', function () {
             // Remove selected class from all options
             document.querySelectorAll('.urgency-option').forEach(option => {
                 option.classList.remove('selected');
@@ -277,14 +377,14 @@ function initEnhancedFormInteractions() {
     const charCount = document.getElementById('charCount');
 
     if (textarea && charCount) {
-        textarea.addEventListener('input', function() {
+        textarea.addEventListener('input', function () {
             charCount.textContent = this.value.length;
         });
     }
 
     // Add click handlers for better mobile experience
     document.querySelectorAll('.service-option').forEach(option => {
-        option.addEventListener('click', function() {
+        option.addEventListener('click', function () {
             const radio = this.querySelector('input[type="radio"]');
             if (radio) {
                 radio.checked = true;
@@ -294,7 +394,7 @@ function initEnhancedFormInteractions() {
     });
 
     document.querySelectorAll('.urgency-option').forEach(option => {
-        option.addEventListener('click', function() {
+        option.addEventListener('click', function () {
             const radio = this.querySelector('input[type="radio"]');
             if (radio) {
                 radio.checked = true;
@@ -331,7 +431,7 @@ function handleEnhancedQuoteSubmission(form) {
         const whatsappMessage = createEnhancedWhatsAppMessage(data);
 
         // Open WhatsApp
-        const phoneNumber = '27723386828';
+        const phoneNumber = CONFIG?.business?.phone?.replace(/[^\d]/g, '') || '27723386828';
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
         window.open(whatsappUrl, '_blank');
@@ -356,11 +456,14 @@ function handleEnhancedQuoteSubmission(form) {
                 option.classList.remove('selected');
             });
 
-            // Set default urgency selection
-            const defaultUrgency = document.querySelector('input[name="urgency"][value="week"]');
-            if (defaultUrgency) {
-                defaultUrgency.checked = true;
-                defaultUrgency.closest('.urgency-option').classList.add('selected');
+            // Set default urgency selection based on config
+            const defaultUrgencyId = Object.entries(URGENCY_OPTIONS || {}).find(([_, option]) => option.default)?.[0];
+            if (defaultUrgencyId) {
+                const defaultUrgency = document.querySelector(`input[name="urgency"][value="${defaultUrgencyId}"]`);
+                if (defaultUrgency) {
+                    defaultUrgency.checked = true;
+                    defaultUrgency.closest('.urgency-option').classList.add('selected');
+                }
             }
 
             // Reset character counter
@@ -383,44 +486,6 @@ function handleEnhancedQuoteSubmission(form) {
         }, 3000);
 
     }, 1000);
-}
-
-/**
- * Create enhanced WhatsApp message from form data
- * @param {Object} data - Form data object
- * @returns {string} Formatted WhatsApp message
- */
-function createEnhancedWhatsAppMessage(data) {
-    const serviceMap = {
-        'windows': 'Windows Install (R250-R400)',
-        'website': 'Website Development (R400-R700)',
-        'software': 'Software Installation (R100-R200)',
-        'hardware': 'Hardware Upgrade (R150-R300)',
-        'combo': 'Multiple Services (Custom Quote)'
-    };
-
-    const urgencyMap = {
-        'asap': 'ASAP (within 1-2 days)',
-        'week': 'This week',
-        'flexible': 'I\'m flexible with timing'
-    };
-
-    const serviceName = serviceMap[data.service] || data.service;
-    const urgencyText = urgencyMap[data.urgency] || data.urgency;
-
-    // Create message without emojis to avoid encoding issues
-    let message = `Hi! I'd like to request a quote from your IT services website\n\n`;
-    message += `Name: ${data.name}\n`;
-    message += `Service: ${serviceName}\n`;
-    message += `Timeline: ${urgencyText}\n\n`;
-
-    if (data.details) {
-        message += `Additional Details:\n${data.details}\n\n`;
-    }
-
-    message += `Could you please send me a quote? Thanks!`;
-
-    return message;
 }
 
 /**
@@ -481,7 +546,7 @@ function initServiceCardAnimations() {
 
     serviceCards.forEach(card => {
         // Add click handler for mobile devices
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function () {
             // Remove active class from all cards
             serviceCards.forEach(c => c.classList.remove('card-active'));
 
@@ -497,12 +562,12 @@ function initServiceCardAnimations() {
         // Add pricing highlight animation
         const priceRange = card.querySelector('.price-range');
         if (priceRange) {
-            card.addEventListener('mouseenter', function() {
+            card.addEventListener('mouseenter', function () {
                 priceRange.style.transform = 'scale(1.05)';
                 priceRange.style.transition = 'transform 0.2s ease';
             });
 
-            card.addEventListener('mouseleave', function() {
+            card.addEventListener('mouseleave', function () {
                 priceRange.style.transform = 'scale(1)';
             });
         }
@@ -516,7 +581,7 @@ function initNavbarScrollEffect() {
     const header = document.querySelector('.header');
     let lastScrollTop = 0;
 
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
         // Add/remove scrolled class for styling
@@ -548,7 +613,7 @@ function initScrollAnimations() {
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const observer = new IntersectionObserver(function(entries) {
+    const observer = new IntersectionObserver(function (entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate-in');
@@ -570,3 +635,11 @@ function initScrollAnimations() {
         card.style.setProperty('--animation-delay', `${index * 0.1}s`);
     });
 }
+
+// Initialize price displays when config is available
+document.addEventListener('DOMContentLoaded', () => {
+    // Update price displays if config is available
+    if (CONFIG?.pricing) {
+        updatePriceDisplays();
+    }
+});
