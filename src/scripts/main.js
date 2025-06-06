@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initEnhancedFormInteractions();
     initCustomValidation();
 
-    // Update copyright year
+// Update copyright year
     const yearElement = document.getElementById('current-year');
     if (yearElement) {
-        yearElement.textContent = new Date().getFullYear();
+        yearElement.textContent = new Date().getFullYear().toString();
     }
 });
 
@@ -424,34 +424,6 @@ function createEnhancedWhatsAppMessage(data) {
 }
 
 /**
- * Legacy WhatsApp message creation (for backward compatibility)
- * @param {Object} data - Form data object
- * @returns {string} Formatted WhatsApp message
- */
-function createWhatsAppMessage(data) {
-    const serviceMap = {
-        'windows': 'Windows Install (R250-R400)',
-        'website': 'Website Development (R400-R700)',
-        'software': 'Software Installation (R100-R200)',
-        'hardware': 'Hardware Upgrade (R150-R300)',
-        'combo': 'Multiple Services'
-    };
-
-    const serviceName = serviceMap[data.service] || data.service;
-
-    return `Hi! I'd like to request a quote for:
-
-🔧 Service: ${serviceName}
-👤 Name: ${data.name}
-📱 Phone: ${data.phone}
-
-📝 Details:
-${data.details || 'No additional details provided'}
-
-Please send me a quote when convenient. Thanks!`;
-}
-
-/**
  * Show notification to user
  * @param {string} message - Message to display
  * @param {string} type - Type of notification (success, error, info)
@@ -545,7 +517,7 @@ function initNavbarScrollEffect() {
     let lastScrollTop = 0;
 
     window.addEventListener('scroll', function() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
         // Add/remove scrolled class for styling
         if (scrollTop > 50) {
