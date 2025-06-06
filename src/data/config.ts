@@ -103,8 +103,9 @@ export const ENHANCED_SERVICES: Record<string, ServiceConfig> = {
         id: 'windows',
         title: 'Clean Windows Install',
         icon: '💻',
-        description: 'Fresh OS installation with drivers and updates (excludes data backup & OS license)',
+        description: 'Fresh OS installation with drivers and updates',
         price: CONFIG.pricing.services.windows,
+        priceNote: 'Excludes data backup & OS license',
         features: [
             'Complete system format',
             'Fresh Windows installation',
@@ -117,15 +118,16 @@ export const ENHANCED_SERVICES: Record<string, ServiceConfig> = {
     },
     website: {
         id: 'website',
-        title: 'One-Page Basic Website',
+        title: 'One-Page Website',
         icon: '🌐',
-        description: 'Professional single-page website using HTML/CSS or builder platforms',
+        description: 'Clean, fast site coded from scratch (HTML/CSS/JS if needed)',
         price: CONFIG.pricing.services.website,
+        priceNote: 'Hosting & domain separate',
         features: [
-            'Custom design or builder-based',
-            'Mobile-responsive layout',
-            'Basic SEO optimization',
-            'Optional hosting/domain support'
+            'Hand-coded from scratch',
+            'Mobile-responsive design',
+            'Fast loading & clean code',
+            'No vendor lock-in'
         ],
         category: 'development',
         estimatedTime: '1-3 days',
@@ -137,7 +139,7 @@ export const ENHANCED_SERVICES: Record<string, ServiceConfig> = {
         icon: '📦',
         description: 'Bulk software setup including Office, antivirus, browsers, and essential apps',
         price: CONFIG.pricing.services.software,
-        priceNote: 'Per session (flat rate)',
+        priceNote: 'Software licenses separate',
         features: [
             'Microsoft Office suite',
             'Antivirus & security software',
@@ -152,8 +154,9 @@ export const ENHANCED_SERVICES: Record<string, ServiceConfig> = {
         id: 'hardware',
         title: 'RAM or SSD Upgrade',
         icon: '🧠',
-        description: 'Professional hardware installation and setup (parts cost excluded)',
+        description: 'Professional hardware installation and setup',
         price: CONFIG.pricing.services.hardware,
+        priceNote: 'Hardware parts cost separate',
         features: [
             'RAM memory upgrades',
             'SSD drive installation',
