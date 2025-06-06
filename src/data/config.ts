@@ -48,7 +48,15 @@ const CONFIG = {
         addons: {
             cleanup: 150,
             drivers: 150,
-            windowsOffice: 450
+            callout: 75  // Added call-out fee
+        },
+
+        fees: {
+            callout: {
+                price: 75,
+                description: 'Travel fee for on-site visits',
+                note: 'Applied when I travel to your location'
+            }
         },
 
         discounts: {
@@ -188,10 +196,10 @@ export const ENHANCED_ADDONS: AddonConfig[] = [
         description: 'Complete driver package & Windows activation'
     },
     {
-        id: 'windowsOffice',
-        title: 'Windows + Office Combo',
-        price: CONFIG.pricing.addons.windowsOffice,
-        description: 'Complete OS and productivity suite setup'
+        id: 'callout',
+        title: 'Call-out Fee',
+        price: CONFIG.pricing.addons.callout,
+        description: 'Travel fee for on-site visits (when I come to you)'
     }
 ];
 
