@@ -13,6 +13,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Intersection Observer for animations
     initScrollAnimations();
+
+    // Update copyright year
+    const yearElement = document.getElementById('current-year');
+    if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+    }
 });
 
 /**

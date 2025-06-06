@@ -523,6 +523,16 @@ body {
     max-width: 400px;
 }
 
+.footer a {
+    color: #10b981;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
 .sr-only {
     position: absolute;
     width: 1px;
