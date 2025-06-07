@@ -210,7 +210,7 @@ export const CONTENT = {
     hero: {
         title: 'Personal IT Services to Fund My Padel Addiction',
         subtitle: "Hi! I'm a tech enthusiast who loves solving computer problems almost as much as I love playing padel. Every service helps me get closer to my next match on the court!",
-        cta: 'Check Out My Services'
+        cta: 'Get Free Quote'
     },
 
     sections: {
