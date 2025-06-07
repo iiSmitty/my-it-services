@@ -14,17 +14,84 @@ import {
 
 // Get service IDs with proper typing
 const mainServiceIds = SERVICE_IDS.filter(id => id !== 'combo');
+
+// SEO Meta Information
+const title = "IT Services - Funding My Padel Addiction";
+const description = "Personal IT services including Windows installations, website development, software setup, and hardware upgrades. Clear pricing, reliable service!";
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = "https://i.imgur.com/5vHR6ku.png";
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Services - Funding My Padel Addiction</title>
-    <meta name="description" content="Personal IT services including Windows installations, website development, software setup, and hardware upgrades. Clear pricing, reliable service!">
+
+    {/* --- Basic SEO --- */}
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <meta name="keywords" content="IT services, Windows installation, website development, software setup, hardware upgrades, Cape Town, Northern Suburbs">
+    <meta name="author" content={CONFIG.business.name}>
+    <link rel="canonical" href={canonicalURL}>
+
+    {/* --- Open Graph (Facebook, LinkedIn, etc.) --- */}
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonicalURL}>
+    <meta property="og:image" content={ogImage}>
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content={CONFIG.business.name}>
+    <meta property="og:locale" content="en_ZA">
+
+    {/* --- Twitter Card --- */}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content={ogImage}>
+
+    {/* --- Additional Meta Tags --- */}
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#2563eb">
+
+    {/* --- Favicon --- */}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    {/* --- Styles --- */}
     <link rel="stylesheet" href="/styles/main.css">
+
+    {/* --- Structured Data (JSON-LD) --- */}
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": CONFIG.business.name,
+        "description": description,
+        "url": canonicalURL.toString(),
+        "telephone": CONFIG.business.phone,
+        "email": CONFIG.business.email,
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Cape Town",
+            "addressRegion": "Western Cape",
+            "addressCountry": "ZA"
+        },
+        "serviceArea": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {
+                "@type": "GeoCoordinates",
+                "latitude": -33.8688,
+                "longitude": 18.4221
+            },
+            "geoRadius": "50000"
+        },
+        "services": [
+            "Windows Installation",
+            "Website Development",
+            "Software Installation",
+            "Hardware Upgrades"
+        ]
+    })}>
+    </script>
 </head>
 <body>
 <header class="header">
@@ -171,7 +238,7 @@ const mainServiceIds = SERVICE_IDS.filter(id => id !== 'combo');
 <footer class="footer">
     <div class="container">
         <div class="footer-content">
-            <p>&copy; <span id="current-year"></span> <a href="https://andresmit.co.za" target="_blank" rel="noopener noreferrer">andresmit.co.za</a></p>
+            <p>&copy; <span id="current-year"></span> <a href={CONFIG.business.website} target="_blank">{CONFIG.business.website.replace('https://', '')}</a></p>
             <small class="footer-disclaimer">
                 Personal service on good-faith basis
                 <span class="desktop-separator"> • </span>
