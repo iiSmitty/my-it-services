@@ -95,18 +95,13 @@ const mainServiceIds = SERVICE_IDS.filter(id => id !== 'combo');
                     <h3>Email Me</h3>
                     <a href={`mailto:${CONFIG.business.email}`} class="contact-link">{CONFIG.business.email}</a>
                 </div>
-
-                <div class="contact-card">
-                    <div class="contact-icon">⚡</div>
-                    <h3>Response Time</h3>
-                    <p>Usually respond within a few hours</p>
-                </div>
             </div>
 
             <div class="quote-form">
                 <header class="form-header">
                     <h3>{CONTENT.form.title}</h3>
                     <p>{CONTENT.form.subtitle}</p>
+                    <p>{CONTENT.form.serviceInfo}</p>
                 </header>
 
                 <form class="contact-form" id="quoteForm">

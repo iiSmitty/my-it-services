@@ -227,7 +227,8 @@ export const CONTENT = {
     form: {
         title: 'Quick Quote Request',
         subtitle: 'Tell me what you need and I\'ll send you a personalized quote via WhatsApp',
-        disclaimer: 'Your quote will be sent via WhatsApp - no spam, just a personalized quote and next steps!'
+        serviceInfo: '⚡ Usually respond within 2 hours • 📍 Northern Suburbs, Cape Town',
+        disclaimer: 'No spam, just a personalized quote and next steps!'
     }
 };
 
