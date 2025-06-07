@@ -137,12 +137,12 @@ export const ENHANCED_SERVICES: Record<string, ServiceConfig> = {
         id: 'software',
         title: 'Software Installation',
         icon: '📦',
-        description: 'Bulk software setup including Office, antivirus, browsers, and essential apps',
+        description: 'Bulk software setup including essential apps, browsers, and productivity tools',
         price: CONFIG.pricing.services.software,
         priceNote: 'Software licenses separate',
         features: [
             'Microsoft Office suite',
-            'Antivirus & security software',
+            'Windows update & security check',
             'Essential browsers & apps',
             'Configuration & setup'
         ],
