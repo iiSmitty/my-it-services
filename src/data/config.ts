@@ -220,7 +220,7 @@ export const CONTENT = {
         },
         contact: {
             title: "Let's Get Your Tech Sorted (And My Padel Game Funded!)",
-            subtitle: 'Ready to upgrade your tech? Drop me a message and let\'s get started. Every job gets me one step closer to the padel court!'
+            subtitle: 'Ready to upgrade your tech? Drop me a message and let\'s get started.'
         }
     },
 

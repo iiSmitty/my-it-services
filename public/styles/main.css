@@ -1008,3 +1008,10 @@ textarea:invalid {
     margin-top: 0.5rem;
     margin-bottom: 0;
 }
+
+.contact-extra {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
