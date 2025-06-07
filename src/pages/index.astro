@@ -170,7 +170,13 @@ const mainServiceIds = SERVICE_IDS.filter(id => id !== 'combo');
 <footer class="footer">
     <div class="container">
         <div class="footer-content">
-            <p>&copy; <span id="current-year"></span> <a href={CONFIG.business.website} target="_blank">{CONFIG.business.website.replace('https://', '')}</a> | Personal IT Services</p>
+            <p>&copy; <span id="current-year"></span> <a href={CONFIG.business.website} target="_blank">{CONFIG.business.website.replace('https://', '')}</a></p>
+            <small class="footer-disclaimer">
+                Personal service on good-faith basis
+                <span class="desktop-separator"> • </span>
+                <span class="mobile-break"><br></span>
+                Valid licenses required for software installations
+            </small>
         </div>
     </div>
 </footer>

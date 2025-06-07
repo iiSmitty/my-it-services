@@ -741,6 +741,8 @@ aside.addons-section h3 {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .footer-brand {
@@ -765,6 +767,35 @@ aside.addons-section h3 {
 
 .footer a:hover {
     text-decoration: underline;
+}
+
+.footer-disclaimer {
+    color: #6b7280;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+}
+
+.mobile-break {
+    display: none;
+}
+
+.footer-disclaimer small {
+    color: #9ca3af;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .desktop-separator {
+        display: none;
+    }
+
+    .mobile-break {
+        display: inline;
+    }
 }
 
 .sr-only {
