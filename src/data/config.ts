@@ -31,7 +31,7 @@ const CONFIG = {
         name: 'IT Services & Padel Dreams',
         phone: '+27723386828',
         email: 'info@andresmit.co.za',
-        website: 'https://andresmit.co.za'
+        website: 'https://andresmit.co.za/'
     },
 
     pricing: {
